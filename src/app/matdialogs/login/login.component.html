@@ -1,0 +1,29 @@
+<div class="body">
+    <div class="title">
+        <h1>Chattr </h1>
+        <img src="/assets/logo.png">
+    </div>
+    <h2>Login</h2>
+    <form class="login-form" [formGroup]="loginFormControl">
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input class="input" type="email" matInput formControlName="email">
+            @if (loginFormControl.get('email')?.hasError('required') && loginFormControl.get('email')?.hasError('email')) {
+                <mat-error>Please enter a valid email</mat-error>
+            }
+            @if (loginFormControl.get('email')?.hasError('required')) {
+                <mat-error>Email is required</mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input type="password" matInput formControlName="password">
+            @if (loginFormControl.get('password')?.hasError('required')) {
+                <mat-error>Password is required</mat-error>
+            }
+        </mat-form-field>
+        <button type="submit" [disabled]="loginFormControl.invalid" (click)="login()">
+            Login
+        </button>
+    </form>
+</div>

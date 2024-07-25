@@ -1,1 +1,31 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    --primary-400: #313338;
+    --primary-500: #2B2D31;
+    --primary-700: #1E1F22;
+    --accent-300: #F2F3F5;
+    --accent-500: #BCBFC3;
+}
+
+*{
+    box-sizing: border-box;
+    font-family: "Jost", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    margin: 0;
+    padding: 0;
+    border: 0;
+}
+body {
+    font-family: "Jost", sans-serif;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: "Jost", sans-serif; }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+body{
+    background-color: var(--primary-400);
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

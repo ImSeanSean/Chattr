@@ -1,0 +1,96 @@
+.body{
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+}
+/*Sidebar*/
+.sidebar{
+    background-color: var(--primary-500);
+    width: 23vw;
+}
+.title{
+    display: flex;
+    align-items: center;
+    color: var(--accent-300);
+    column-gap: 5px;
+    height: 12vh;
+    padding: 0px 10px;
+    border-bottom: 4px solid var(--primary-400);
+}
+.title img{
+    height: 55px;
+}
+.title h1{
+    font-size: 40px;
+}
+/*Recent Messages*/
+.recents{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    padding: 20px 10px;
+}
+.chatter-bar{
+    cursor: pointer;
+    align-items: center;
+    background-color: var(--primary-700);
+    border: solid 1.5px #63666A;
+    border-radius: 15px;
+    padding: 10px 15px;
+    display: flex;
+    gap: 5px;
+    color: var(--accent-300);
+}
+.chatter-bar .logo{
+    height: 100%;
+}
+.chatter-bar .logo i{
+    font-size: 45px;
+}
+.message-bar{
+    cursor: pointer;
+    align-items: center;
+    background-color: var(--primary-700);
+    border: solid 1.5px #63666A;
+    border-radius: 15px;
+    padding: 10px 15px;
+    display: flex;
+    gap: 5px;
+    color: var(--accent-300);
+    width: 100%;
+}
+.message-bar .logo{
+    height: 100%;
+}
+.message-bar .logo i{
+    font-size: 45px;
+}
+.message-bar .user{
+    width: 100%;
+}
+.message-bar .user .message{
+    width: 80%;
+}
+.message-bar .message p{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 14px;
+}
+/*Chat*/
+.main{
+    width: 77vw;
+}
+.chat-title{
+    height: 12vh;
+    color: var(--accent-300);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-bottom: 4px solid var(--primary-700);
+    padding: 0px 10px;
+}
+.chat-title i{
+    font-size: 60px;
+}

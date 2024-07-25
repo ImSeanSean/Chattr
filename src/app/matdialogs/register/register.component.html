@@ -1,0 +1,43 @@
+<div class="body">
+    <div class="title">
+        <h1>Chattr </h1>
+        <img src="/assets/logo.png">
+    </div>
+    <h2>Register</h2>
+    <form class="login-form" [formGroup]="registerFormControl">
+        <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input type="username" matInput formControlName="username">
+            @if (registerFormControl.get('username')?.hasError('required')) {
+                <mat-error>Username is required</mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input class="input" type="email" matInput formControlName="email">
+            @if (registerFormControl.get('email')?.hasError('required') && registerFormControl.get('email')?.hasError('email')) {
+                <mat-error>Please enter a valid email</mat-error>
+            }
+            @if (registerFormControl.get('email')?.hasError('required')) {
+                <mat-error>Email is required</mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input type="password" matInput formControlName="password">
+            @if (registerFormControl.get('password')?.hasError('required')) {
+                <mat-error>Password is required</mat-error>
+            }
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Confirm Password</mat-label>
+            <input type="password" matInput formControlName="password">
+            @if (registerFormControl.get('password')?.hasError('required')) {
+                <mat-error>Confirm your password.</mat-error>
+            }
+        </mat-form-field>
+        <button type="submit" [disabled]="registerFormControl.invalid">
+            Login
+        </button>
+    </form>
+</div>
