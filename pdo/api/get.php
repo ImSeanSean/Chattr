@@ -70,4 +70,20 @@ class Get
         }
         return $this->get_records("users", $conditions);
     }
+    public function get_active_users($id = null)
+    {
+        $conditions = "active = 1";
+        if ($id != null) {
+            $conditions .= " AND userid = :userid";
+        }
+        return $this->get_records("users", $conditions);
+    }
+    public function get_chatter_message($id = null)
+    {
+        $conditions = null;
+        if ($id != null) {
+            $conditions = "messageid = $id";
+        }
+        return $this->get_records("chattermessages", $conditions);
+    }
 }

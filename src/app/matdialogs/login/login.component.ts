@@ -4,6 +4,9 @@ import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
+import { HttpClient } from '@angular/common/http';
+import { mainPort } from '../../app.component';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-login',
@@ -15,6 +18,7 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class LoginComponent {
   constructor(
     private router: Router,
+    private authentication: AuthenticationService,
     private dialogRef: MatDialogRef<LoginComponent>
   ){}
 
@@ -23,8 +27,18 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required])
   })
 
-  login(){
-    this.router.navigate(['/chats/the-chatter'])
-    this.dialogRef.close()
+  login() {
+    if (this.loginFormControl.valid) {
+      this.authentication.login(this.loginFormControl.value).subscribe((isLoggedIn: boolean) => {
+        if (isLoggedIn) {
+          this.router.navigate(['/chats/the-chatter']);
+          this.dialogRef.close();
+          console.log("true");
+        } else {
+          this.dialogRef.close();
+          console.log("false");
+        }
+      });
+    }
   }
 }

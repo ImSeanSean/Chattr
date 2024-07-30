@@ -1,41 +1,26 @@
 <div class="body">
     <div class="messages">
-        <div class="message-list">
-            <div class="incoming">
-                <div class="icon">
+        <div class="message-list" #messageList>
+            <div [ngClass]="{
+                incoming: message.username !== username,
+                outgoing: message.username === username
+            }" *ngFor="let message of messages">
+                <div class="icon" *ngIf="message.username !== username">
                     <i class='bx bxs-user-circle'></i>
                 </div>
                 <div class="user">
-                    <h3>user1233489</h3>
-                    <p>Hello, guys. This is a good spot to chat.</p>
-                </div>
-            </div>
-            <div class="incoming">
-                <div class="icon">
-                    <i class='bx bxs-user-circle'></i>
-                </div>
-                <div class="user">
-                    <h3>user1233489</h3>
-                    <p>Hello, guys. This is a good spot to chat lol.</p>
-                </div>
-            </div>
-            <div class="outgoing">
-                <div class="user">
-                    <h3>user1233489</h3>
-                    <p>Hi, I’m new here. I am happy to know you guys.</p>
+                    <h3>{{message.username}}</h3>
+                    <p>{{message.message}}</p>
                 </div>  
-                <!-- <div class="icon">
-                    <i class='bx bxs-user-circle'></i>
-                </div> -->
             </div>
         </div>
         <div class="chat-box">
-            <textarea></textarea>
+            <textarea (keydown)="sendMessage($event)" [(ngModel)]="message"></textarea>
         </div>
     </div>
     <div class="active-users">
-        <h3>Active Users ({{users.length}})</h3>
-        <div class="user" *ngFor="let user of users">
+        <h3>Active Users ({{active.length}})</h3>
+        <div class="user" *ngFor="let user of active">
             <i class='bx bxs-user-circle'></i>
             <p>{{user.username}}</p>
         </div>

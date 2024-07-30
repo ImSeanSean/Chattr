@@ -4,7 +4,7 @@
     display: flex;
 }
 .messages{
-    width: 80%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -67,25 +67,4 @@
     height: 100%;
     border: 2px solid var(--accent-500);
     background-color: var(--primary-500);
-}
-.active-users{
-    width: 20%;
-    border-left: 2px solid var(--accent-500);
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    color: var(--accent-300);
-}
-.active-users h3{
-    padding: 10px 0px;
-}
-.active-users .user{
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    color: var(--accent-300);
-}
-.active-users .user i{
-    font-size: 35px
 }

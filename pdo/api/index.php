@@ -3,7 +3,6 @@ include "./get.php";
 include "./post.php";
 include "../config/database.php";
 
-
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: *');
 header('Access-Control-Allow-Headers: *');
@@ -42,6 +41,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     echo json_encode($get->get_users());
                 }
                 break;
+            case 'get_active_users':
+                if (count($request) > 1) {
+                    echo json_encode($get->get_active_users($request[1]));
+                } else {
+                    echo json_encode($get->get_active_users());
+                }
+                break;
+            case 'get_chatter_message':
+                if (count($request) > 1) {
+                    echo json_encode($get->get_chatter_message($request[1]));
+                } else {
+                    echo json_encode($get->get_chatter_message());
+                }
+                break;
             default:
                 http_response_code(403);
                 break;
@@ -51,9 +64,18 @@ switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':
         $data = json_decode(file_get_contents("php://input"));
         switch ($request[0]) {
-                // case 'verification':
-                //     echo json_encode($post->sendMail($data));
-                //     break;
+            case 'login':
+                echo json_encode($post->login($data));
+                break;
+            case 'store_chatter_message':
+                echo json_encode($post->storeChatterMessage($data));
+                break;
+            case 'change_active':
+                echo json_encode($post->changeActive($data));
+                break;
+            case 'change_offline':
+                echo json_encode($post->changeOffline($data));
+                break;
             default:
                 http_response_code(403);
                 break;

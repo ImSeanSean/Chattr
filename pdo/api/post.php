@@ -16,10 +16,10 @@ class Post
 
         return array(
             "status" => $status,
-            "data" => $data,  // Include data in the response
-            "prepared_by" => "AppointMe",
+            "data" => $data,
+            "prepared_by" => "Chattr",
             "timestamp" => date_create(),
-            "code" => $code  // Include code in the response
+            "code" => $code
         );
     }
 
@@ -46,5 +46,97 @@ class Post
             $code = 403;
         }
         return array("code" => $code, "errmsg" => $errmsg);
+    }
+    //Login
+    public function login($data)
+    {
+        //Initialize
+        $email = $data->email;
+        $password = $data->password;
+        //Check if Email Exists
+        $sql = "SELECT * FROM users WHERE email = :email";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->execute();
+        // If User Found
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($user) {
+            if ($password == $user['password']) {
+                return $user;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+    //Message
+    public function storeChatterMessage($data)
+    {
+        //Initialize
+        $userid = $data->userid;
+        $username = $data->username;
+        $message = $data->message;
+        //SQL 
+        $sqlString = "INSERT INTO chattermessages (userid,  username, message) VALUES (:userid, :username, :message)";
+        //Bind
+        $stmt = $this->pdo->prepare($sqlString);
+        $stmt->bindParam(':userid', $userid);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':message', $message);
+        //Execute
+        if ($stmt->execute()) {
+            // Return success response
+            return $this->sendPayLoad(null, "Message stored successfully", "Message has been stored.", 200);
+        } else {
+            // Return failure response
+            return $this->sendPayLoad(null, "Failed to store message", "Could not store the message.", 500);
+        }
+    }
+    public function changeActive($data)
+    {
+        // Initialize
+        $userid = $data->userid;
+
+        // SQL
+        $sqlString = "UPDATE users SET active = 1 WHERE userid = :userid";
+
+        // Bind and Execute
+        try {
+            $stmt = $this->pdo->prepare($sqlString);
+            $stmt->bindParam(':userid', $userid);
+
+            if ($stmt->execute()) {
+                return $this->sendPayLoad($stmt, "User's active status changed", "Active status is successfully changed.", 200);
+            } else {
+                return $this->sendPayLoad(null, "Failed to change status", "Could not change the user's active status.", 500);
+            }
+        } catch (PDOException $e) {
+            return $this->sendPayLoad(null, "Failed to change status", $e->getMessage(), 500);
+        }
+    }
+
+    public function changeOffline($data)
+    {
+        // Initialize
+        $userid = $data->userid;
+
+        // SQL
+        $sqlString = "UPDATE users SET active = 0 WHERE userid = :userid";
+
+        // Bind and Execute
+        try {
+            $stmt = $this->pdo->prepare($sqlString);
+            $stmt->bindParam(':userid', $userid);
+
+            if ($stmt->execute()) {
+                return $this->sendPayLoad($stmt, "User's active status changed", "Offline status is successfully changed.", 200);
+            } else {
+                return $this->sendPayLoad(null, "Failed to change status", "Could not change the user's active status.", 500);
+            }
+        } catch (PDOException $e) {
+            return $this->sendPayLoad(null, "Failed to change status", $e->getMessage(), 500);
+        }
     }
 }

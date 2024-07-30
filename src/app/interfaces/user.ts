@@ -1,5 +1,6 @@
 export interface User {
-    userid: number,
+    userid: string,
     username: string,
     email: string
+    actiive: string | null
 }
