@@ -12,11 +12,13 @@ class Chat implements MessageComponentInterface
 {
     protected $users;
     protected $activeUsers;
+    protected $registeredUsers;
 
     public function __construct()
     {
         $this->users = new \SplObjectStorage;
         $this->activeUsers = [];
+        $this->registeredUsers = [];
     }
 
     public function onOpen(ConnectionInterface $conn)
@@ -39,17 +41,27 @@ class Chat implements MessageComponentInterface
     public function onClose(ConnectionInterface $conn)
     {
         $this->users->detach($conn);
+        //Remove 
+        foreach ($this->registeredUsers as $username => $connections) {
+            $key = array_search($conn, $connections);
+            if ($key !== false) {
+                unset($this->userConnections[$username][$key]);
 
-        //Reset Active Users
+                // Clean up if the user has no more connections
+                if (empty($this->userConnections[$username])) {
+                    unset($this->userConnections[$username]);
+                }
+                break;
+            }
+        }        //Reset Active Users
         $this->activeUsers = [];
         foreach ($this->users as $user) {
             $user->send(json_encode([
                 'type' => 'status',
                 'username' => '',
-                'message' => 'Change status to active.'
+                'message' => 'Update status.'
             ]));
         }
-
         echo "Connection Detached\n";
     }
 
@@ -59,6 +71,16 @@ class Chat implements MessageComponentInterface
         $data = json_decode($msg);
         $username = $data->username;
         $message = $data->message;
+
+        //Register Connection to Active Users
+        if ($data->type == "register") {
+            if (!isset($this->registeredUsers[$username])) {
+                $this->registeredUsers[$username] = [];
+            }
+            $this->registeredUsers[$username][] = $from;
+
+            echo $message . "\n";
+        }
 
         //If Active Users
         if ($data->type == "active") {
@@ -75,6 +97,7 @@ class Chat implements MessageComponentInterface
                 ]));
             }
         }
+
         //If Global Message
         if ($data->type == "global") {
             echo "{$username}: {$message}\n";
@@ -90,10 +113,18 @@ class Chat implements MessageComponentInterface
         }
         //If Private Message
         if ($data->type == "private") {
-            $chatterid = $data->chatterid;
-            echo "{$username} to ID:{$chatterid}: {$message}\n";
-
-            $user
+            $chatterUsername = $data->chatterUsername;
+            echo "{$username} to ID:{$chatterUsername}: {$message}\n";
+            //Check if user is logged in
+            if (isset($this->registeredUsers[$chatterUsername])) {
+                foreach ($this->registeredUsers[$chatterUsername] as $connection) {
+                    $connection->send(json_encode([
+                        'type' => 'private',
+                        'username' => $username,
+                        'message' => $message
+                    ]));
+                }
+            }
         }
     }
 

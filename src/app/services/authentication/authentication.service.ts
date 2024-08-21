@@ -12,8 +12,10 @@ export class AuthenticationService {
   constructor(private http: HttpClient) { }
 
   login(data: Object): Observable<boolean> {
+    console.log(data)
     return this.http.post<User>(`${mainPort}/pdo/api/login`, data).pipe(
       map(result => {
+        console.log(result)
         if (result) {
           console.log(result.username)
           localStorage.setItem('username', result.username);

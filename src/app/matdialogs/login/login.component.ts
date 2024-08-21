@@ -29,8 +29,8 @@ export class LoginComponent {
 
   login() {
     if (this.loginFormControl.valid) {
-      this.authentication.login(this.loginFormControl.value).subscribe((isLoggedIn: boolean) => {
-        if (isLoggedIn) {
+      this.authentication.login(this.loginFormControl.value).subscribe((isLoggedIn) => {
+        if (isLoggedIn == true) {
           this.router.navigate(['/chats/the-chatter']);
           this.dialogRef.close();
           console.log("true");

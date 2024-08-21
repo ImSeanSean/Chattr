@@ -1,18 +1,23 @@
-<div class="body">
-    <div class="messages">
-        <div class="message-list" #messageList>
-            <div class="incoming">
-                <div class="icon">
-                    <i class='bx bxs-user-circle'></i>
+<div class="div" *ngIf="isLoaded == true">
+    <div class="body">
+        <div class="messages">
+            <div class="message-list" #messageList>
+                <div [ngClass]="{
+                    incoming: message.username !== username,
+                    outgoing: message.username === username
+                }" *ngFor="let message of messages">
+                    <div class="icon" *ngIf="message.username !== username">
+                        <i class='bx bxs-user-circle'></i>
+                    </div>
+                    <div class="user">
+                        <h3>{{message.username}}</h3>
+                        <p>{{message.message}}</p>
+                    </div>  
                 </div>
-                <div class="user">
-                    <h3>user81329873</h3>
-                    <p>hi</p>
-                </div>  
             </div>
-        </div>
-        <div class="chat-box">
-            <textarea></textarea>
+            <div class="chat-box">
+                <textarea [(ngModel)]="message" (keydown)="sendPrivateMessage($event)"></textarea>
+            </div>
         </div>
     </div>
 </div>

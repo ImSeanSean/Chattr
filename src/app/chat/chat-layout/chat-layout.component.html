@@ -15,7 +15,7 @@
                     </div>
                 </div>
             </div>
-            <div class="message-bar" *ngFor="let user of users" (click)="navigatePrivateChat(user.userid)">
+            <div class="message-bar" *ngFor="let user of users" (click)="navigatePrivateChat(user.userid, user.username)">
                 <div class="logo">
                     <i class='bx bxs-user-circle'></i>
                 </div>
@@ -33,7 +33,7 @@
     <div class="main">
         <div class="chat-title">
             <i class='bx bx-globe'></i>
-            <h1>The Chatter</h1>
+            <h1>{{chatTitle}}</h1>
         </div>
         <router-outlet></router-outlet>
     </div>

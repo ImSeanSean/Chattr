@@ -11,6 +11,7 @@ import { User } from '../../interfaces/user';
 export class WebsocketService {
   private socket!: WebSocket;
   private messages = new Subject<Message>();
+  private privateMessages = new Subject<Message>();
   private connection = new Subject<boolean>();
   private activeUsers = new BehaviorSubject<User[]>([]);
   private username = localStorage.getItem('username');
@@ -49,6 +50,10 @@ export class WebsocketService {
       if(data.type === 'global'){
         this.messages.next(data);
       }
+      // If Private Message
+      if(data.type === 'private'){
+        this.privateMessages.next(data);
+      }
     }
 
     this.socket.onerror = (event: Event) => {
@@ -77,6 +82,10 @@ export class WebsocketService {
     return this.messages.asObservable();
   }
 
+  getPrivateMessages(): Observable<Message> {
+    return this.privateMessages.asObservable();
+  }
+
   // Active
   sendActive(username: string){
     this.changeActive();
@@ -85,6 +94,15 @@ export class WebsocketService {
         type: 'active',
         username: username,
         message: `${username} is now active.`
+      }
+      this.socket.send(JSON.stringify(data));
+    }
+
+    if(this.socket && this.socket.readyState === WebSocket.OPEN){
+      let data = {
+        type: 'register',
+        username: username,
+        message: `${username}'s connection added.`
       }
       this.socket.send(JSON.stringify(data));
     }
@@ -118,6 +136,18 @@ export class WebsocketService {
   send(message: Message){
     if(this.socket && this.socket.readyState === WebSocket.OPEN){
       this.socket.send(JSON.stringify(message));
+    }
+  }
+
+  sendPrivate(chatterUsername: string, message: string){
+    if(this.socket && this.socket.readyState === WebSocket.OPEN){
+      let data = {
+        type: 'private',
+        username: this.username,
+        chatterUsername: chatterUsername,
+        message: message
+      }
+      this.socket.send(JSON.stringify(data));
     }
   }
 

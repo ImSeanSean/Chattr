@@ -85,7 +85,8 @@ export class TheChatterComponent implements OnInit{
 
   private scrollToBottom(): void {
     try {
-      this.messageList.nativeElement.scrollTop = this.messageList.nativeElement.scrollHeight;
+      this.messageList.nativeElement.scrollTop = this.messageList.nativeElement.scrollHeight;0
+      console.log(this.messages);
     } catch (err) {
       console.error('Scroll to bottom error:', err);
     }

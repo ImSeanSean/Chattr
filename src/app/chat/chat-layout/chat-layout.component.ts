@@ -17,6 +17,7 @@ import { NgFor } from '@angular/common';
 export class ChatLayoutComponent {
 
   users: User[] = [];
+  chatTitle = "The Chatter"
 
 
   constructor(
@@ -37,9 +38,11 @@ export class ChatLayoutComponent {
 
   navigateChatterChat(){
     this.router.navigate(['/chats/the-chatter'])
+    this.chatTitle = "The Chatter"
   }
 
-  navigatePrivateChat(userid: any){
+  navigatePrivateChat(userid: any, username: string){
     this.router.navigate(['/chats/p', userid])
+    this.chatTitle = username;
   }
 }
