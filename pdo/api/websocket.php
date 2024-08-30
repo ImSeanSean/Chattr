@@ -45,7 +45,7 @@ class Chat implements MessageComponentInterface
         foreach ($this->registeredUsers as $username => $connections) {
             $key = array_search($conn, $connections);
             if ($key !== false) {
-                unset($this->userConnections[$username][$key]);
+                unset($this->userConnections[$username][$conn]);
 
                 // Clean up if the user has no more connections
                 if (empty($this->userConnections[$username])) {
@@ -53,7 +53,8 @@ class Chat implements MessageComponentInterface
                 }
                 break;
             }
-        }        //Reset Active Users
+        }
+        //Reset Active Users
         $this->activeUsers = [];
         foreach ($this->users as $user) {
             $user->send(json_encode([
@@ -71,6 +72,8 @@ class Chat implements MessageComponentInterface
         $data = json_decode($msg);
         $username = $data->username;
         $message = $data->message;
+
+        echo "onMessage Received";
 
         //Register Connection to Active Users
         if ($data->type == "register") {
@@ -114,10 +117,12 @@ class Chat implements MessageComponentInterface
         //If Private Message
         if ($data->type == "private") {
             $chatterUsername = $data->chatterUsername;
-            echo "{$username} to ID:{$chatterUsername}: {$message}\n";
             //Check if user is logged in
             if (isset($this->registeredUsers[$chatterUsername])) {
                 foreach ($this->registeredUsers[$chatterUsername] as $connection) {
+                    $connectionId = $connection->resourceId;
+                    echo "Connection ID: {$connectionId}\n";
+                    echo "{$username} to ID:{$chatterUsername}: {$message}\n";
                     $connection->send(json_encode([
                         'type' => 'private',
                         'username' => $username,
