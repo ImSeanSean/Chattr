@@ -55,6 +55,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     echo json_encode($get->get_chatter_message());
                 }
                 break;
+            case 'get_private_message':
+                echo json_encode($get->get_private_message($request[1], $request[2]));
+                break;
             default:
                 http_response_code(403);
                 break;
@@ -69,6 +72,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 break;
             case 'store_chatter_message':
                 echo json_encode($post->storeChatterMessage($data));
+                break;
+            case 'store_private_message':
+                echo json_encode($post->storePrivateMessage($data));
                 break;
             case 'change_active':
                 echo json_encode($post->changeActive($data));

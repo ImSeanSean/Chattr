@@ -94,6 +94,30 @@ class Post
             return $this->sendPayLoad(null, "Failed to store message", "Could not store the message.", 500);
         }
     }
+    public function storePrivateMessage($data)
+    {
+        //Initialize
+        $recipientid = $data->recipientid;
+        $senderid = $data->senderid;
+        $username = $data->username;
+        $message = $data->message;
+        //SQL
+        $sqlString = "INSERT INTO privatemessages (senderid, recipientid, username, message) VALUES (:senderid, :recipientid, :username, :message)";
+        //Bind
+        $stmt = $this->pdo->prepare($sqlString);
+        $stmt->bindParam(':senderid', $senderid);
+        $stmt->bindParam(':recipientid', $recipientid);
+        $stmt->bindParam(':username', $username);
+        $stmt->bindParam(':message', $message);
+        //Execute
+        if ($stmt->execute()) {
+            // Return success response
+            return $this->sendPayLoad(null, "Message stored successfully", "Message has been stored.", 200);
+        } else {
+            // Return failure response
+            return $this->sendPayLoad(null, "Failed to store message", "Could not store the message.", 500);
+        }
+    }
     public function changeActive($data)
     {
         // Initialize

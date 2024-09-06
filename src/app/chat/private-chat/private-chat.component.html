@@ -1,4 +1,8 @@
 <div class="div" *ngIf="isLoaded == true">
+    <div class="chat-title">
+        <i class='bx bxs-user-circle'></i>
+        <h1>{{this.chatter[0].username}}</h1>
+    </div>
     <div class="body">
         <div class="messages">
             <div class="message-list" #messageList>

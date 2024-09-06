@@ -5,12 +5,12 @@ import { UsersService } from '../../services/users/users.service';
 import { WebsocketService } from '../../services/websocket/websocket.service';
 import { Message } from '../../interfaces/message';
 import { User } from '../../interfaces/user';
-import { NgFor } from '@angular/common';
+import { NgFor, NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-chat-layout',
   standalone: true,
-  imports: [RouterModule, NgFor],
+  imports: [RouterModule, NgFor, NgIf],
   templateUrl: './chat-layout.component.html',
   styleUrl: './chat-layout.component.css'
 })
@@ -18,6 +18,7 @@ export class ChatLayoutComponent {
 
   users: User[] = [];
   chatTitle = "The Chatter"
+  username = localStorage.getItem('username');
 
 
   constructor(
@@ -33,6 +34,7 @@ export class ChatLayoutComponent {
   getUsers() {
     this.userService.getUsers().subscribe((result: User[]) => {
       this.users = result;
+      this.users = this.users.filter(user => user.username !== this.username);
     });
   }
 

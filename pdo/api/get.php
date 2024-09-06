@@ -86,4 +86,14 @@ class Get
         }
         return $this->get_records("chattermessages", $conditions);
     }
+    public function get_private_message($senderid, $recipientid)
+    {
+        $conditions = null;
+        if ($recipientid != null && $senderid != null) {
+            $conditions = "(recipientid = $recipientid AND senderid = $senderid 
+                                OR recipientid = $senderid AND senderid = $recipientid)";
+        }
+
+        return $this->get_records("privatemessages", $conditions);
+    }
 }

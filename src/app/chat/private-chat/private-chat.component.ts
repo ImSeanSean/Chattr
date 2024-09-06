@@ -34,6 +34,7 @@ export class PrivateChatComponent implements OnInit{
   ngOnInit(): void {
       this.activeRoute.paramMap.subscribe(result => {
         //If User changes the Chatter
+        this.messages = [];
         let newChatterId = result.get('userid')
         if(newChatterId != this.chatterId){
           //Update ChatterID
@@ -42,6 +43,16 @@ export class PrivateChatComponent implements OnInit{
           this.http.get<User[]>(`${mainPort}/pdo/api/get_users/${this.chatterId}`).subscribe(result => {
             this.chatter = result;
             this.isLoaded = true;
+            //Get Message List
+            let recipientid = this.chatterId;
+            let senderid = localStorage.getItem('userid');
+
+            console.log(recipientid, senderid)
+
+            this.http.get<Message[]>(`${mainPort}/pdo/api/get_private_message/${senderid}/${recipientid}`).subscribe(result => {
+              this.messages = result;
+              console.log(result)
+            })
             //Subscribe to Private Messages to get updated
             this.webSocketService.getPrivateMessages().subscribe((message: Message) => {
               if (this.chatter[0].username === message.username) {
@@ -63,12 +74,18 @@ export class PrivateChatComponent implements OnInit{
           //Store Message to User
           let messageJSON = {
             type: 'private',
+            senderid: localStorage.getItem('userid'),
+            recipientid: this.chatterId,
             username: this.username!,
             message: this.message
           };
           this.messages.push(messageJSON)
           this.message = "";
           this.scrollToBottom();
+          //Store to Database
+          this.http.post(`${mainPort}/pdo/api/store_private_message`, messageJSON).subscribe(result => {
+            console.log(result);
+          })
         } else {
           console.error('Chatter is not loaded or does not have a username.');
         }

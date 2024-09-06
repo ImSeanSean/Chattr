@@ -85,15 +85,3 @@
 .main{
     width: 77vw;
 }
-.chat-title{
-    height: 12vh;
-    color: var(--accent-300);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 4px solid var(--primary-700);
-    padding: 0px 10px;
-}
-.chat-title i{
-    font-size: 60px;
-}

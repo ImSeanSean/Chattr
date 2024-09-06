@@ -52,6 +52,7 @@ export class WebsocketService {
       }
       // If Private Message
       if(data.type === 'private'){
+        console.log("Message Received")
         this.privateMessages.next(data);
       }
     }

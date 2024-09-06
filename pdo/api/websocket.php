@@ -64,6 +64,8 @@ class Chat implements MessageComponentInterface
             ]));
         }
         echo "Connection Detached\n";
+
+        $this->checkRegisteredUsers();
     }
 
     public function onMessage(ConnectionInterface $from, $msg)
@@ -73,13 +75,19 @@ class Chat implements MessageComponentInterface
         $username = $data->username;
         $message = $data->message;
 
-        echo "onMessage Received";
-
         //Register Connection to Active Users
         if ($data->type == "register") {
+            //Is the Username's Array Set
             if (!isset($this->registeredUsers[$username])) {
                 $this->registeredUsers[$username] = [];
             }
+            //Is the Connection Already in the Array
+            foreach ($this->registeredUsers[$username] as $connection) {
+                if ($connection === $from) {
+                    return;
+                }
+            }
+            //Add Connection to the Array
             $this->registeredUsers[$username][] = $from;
 
             echo $message . "\n";
@@ -137,6 +145,17 @@ class Chat implements MessageComponentInterface
     {
         echo "Error: {$e->getMessage()}\n";
         $conn->close();
+    }
+
+    //Extra Functions
+    private function checkRegisteredUsers()
+    {
+        foreach ($this->registeredUsers as $username => $connections) {
+            echo "- Username: {$username}\n";
+            foreach ($connections as $connection) {
+                echo "  - Connection ID: {$connection->resourceId}\n";
+            }
+        }
     }
 }
 
