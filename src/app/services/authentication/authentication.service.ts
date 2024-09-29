@@ -3,21 +3,19 @@ import { Injectable } from '@angular/core';
 import { mainPort } from '../../app.component';
 import { User } from '../../interfaces/user';
 import { catchError, map, Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthenticationService {
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router: Router) {}
 
   login(data: Object): Observable<boolean> {
-    console.log(data)
     return this.http.post<User>(`${mainPort}/pdo/api/login`, data).pipe(
-      map(result => {
-        console.log(result)
+      map((result) => {
         if (result) {
-          console.log(result.username)
+          console.log(result.username);
           localStorage.setItem('username', result.username);
           localStorage.setItem('email', result.email);
           localStorage.setItem('userid', result.userid);
@@ -26,10 +24,17 @@ export class AuthenticationService {
           return false;
         }
       }),
-      catchError(error => {
+      catchError((error) => {
         console.error(error);
         return of(false);
       })
     );
+  }
+
+  logout() {
+    localStorage.removeItem('username');
+    localStorage.removeItem('email');
+    localStorage.removeItem('userid');
+    this.router.navigate(['']);
   }
 }

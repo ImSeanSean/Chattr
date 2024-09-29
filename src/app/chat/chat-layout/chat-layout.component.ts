@@ -6,26 +6,25 @@ import { WebsocketService } from '../../services/websocket/websocket.service';
 import { Message } from '../../interfaces/message';
 import { User } from '../../interfaces/user';
 import { NgFor, NgIf } from '@angular/common';
+import { AuthenticationService } from '../../services/authentication/authentication.service';
 
 @Component({
   selector: 'app-chat-layout',
   standalone: true,
   imports: [RouterModule, NgFor, NgIf],
   templateUrl: './chat-layout.component.html',
-  styleUrl: './chat-layout.component.css'
+  styleUrl: './chat-layout.component.css',
 })
 export class ChatLayoutComponent {
-
   users: User[] = [];
-  chatTitle = "The Chatter"
+  chatTitle = 'The Chatter';
   username = localStorage.getItem('username');
 
-
   constructor(
-    private webSocketService: WebsocketService,
+    private authentication: AuthenticationService,
     private userService: UsersService,
     private router: Router
-  ){}
+  ) {}
 
   ngOnInit(): void {
     this.getUsers();
@@ -34,17 +33,21 @@ export class ChatLayoutComponent {
   getUsers() {
     this.userService.getUsers().subscribe((result: User[]) => {
       this.users = result;
-      this.users = this.users.filter(user => user.username !== this.username);
+      this.users = this.users.filter((user) => user.username !== this.username);
     });
   }
 
-  navigateChatterChat(){
-    this.router.navigate(['/chats/the-chatter'])
-    this.chatTitle = "The Chatter"
+  navigateChatterChat() {
+    this.router.navigate(['/chats/the-chatter']);
+    this.chatTitle = 'The Chatter';
   }
 
-  navigatePrivateChat(userid: any, username: string){
-    this.router.navigate(['/chats/p', userid])
+  navigatePrivateChat(userid: any, username: string) {
+    this.router.navigate(['/chats/p', userid]);
     this.chatTitle = username;
+  }
+
+  logout() {
+    this.authentication.logout();
   }
 }
