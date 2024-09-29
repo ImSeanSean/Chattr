@@ -40,12 +40,11 @@ class Chat implements MessageComponentInterface
 
     public function onClose(ConnectionInterface $conn)
     {
-        $this->users->detach($conn);
         //Remove 
         foreach ($this->registeredUsers as $username => $connections) {
             $key = array_search($conn, $connections);
-            if ($key !== false) {
-                unset($this->userConnections[$username][$conn]);
+            if ($key != false) {
+                unset($this->userConnections[$username][$key]);
 
                 // Clean up if the user has no more connections
                 if (empty($this->userConnections[$username])) {
@@ -63,9 +62,11 @@ class Chat implements MessageComponentInterface
                 'message' => 'Update status.'
             ]));
         }
+        //Remove From Users
+        $this->users->detach($conn);
         echo "Connection Detached\n";
 
-        $this->checkRegisteredUsers();
+        // $this->checkRegisteredUsers();
     }
 
     public function onMessage(ConnectionInterface $from, $msg)
@@ -124,16 +125,35 @@ class Chat implements MessageComponentInterface
         }
         //If Private Message
         if ($data->type == "private") {
+            $senderUsername = $data->username;
             $chatterUsername = $data->chatterUsername;
             //Check if user is logged in
             if (isset($this->registeredUsers[$chatterUsername])) {
                 foreach ($this->registeredUsers[$chatterUsername] as $connection) {
                     $connectionId = $connection->resourceId;
                     echo "Connection ID: {$connectionId}\n";
-                    echo "{$username} to ID:{$chatterUsername}: {$message}\n";
+                    echo "{$username} to {$chatterUsername}: {$message}\n\n";
                     $connection->send(json_encode([
                         'type' => 'private',
                         'username' => $username,
+                        'message' => $message
+                    ]));
+                }
+            }
+            //Send to Other Connections of Sender
+            if (isset($this->registeredUsers[$senderUsername])) {
+                foreach ($this->registeredUsers[$senderUsername] as $connection) {
+                    if ($connection == $from) {
+                        continue;
+                    }
+                    $connectionId = $connection->resourceId;
+                    echo "Connection ID: {$connectionId}\n";
+                    echo "{$username} to {$username}: {$message}\n\n";
+                    $connection->send(json_encode([
+                        'type' => 'private',
+                        'receiver' => $chatterUsername,
+                        'username' => $username,
+                        'sender' => $username,
                         'message' => $message
                     ]));
                 }

@@ -6,7 +6,7 @@ import { mainPort } from '../../app.component';
 import { User } from '../../interfaces/user';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class WebsocketService {
   private socket!: WebSocket;
@@ -17,13 +17,9 @@ export class WebsocketService {
   private username = localStorage.getItem('username');
   private userid = localStorage.getItem('userid');
 
-  constructor(private http: HttpClient){
-    this.connect();
-    this.getActiveUsers();
-    this.addCloseEventListener();
-  }
+  constructor(private http: HttpClient) {}
 
-  connect(){
+  connect() {
     this.socket = new WebSocket('ws://localhost:8080');
 
     let username = localStorage.getItem('username');
@@ -37,41 +33,41 @@ export class WebsocketService {
       let data: Message = JSON.parse(event.data);
 
       // If Ask for Status
-      if(data.type === 'status'){
+      if (data.type === 'status') {
         this.sendActive(username!);
         this.changeActive();
         this.getActiveUsers();
       }
       // If Active Users Changed
-      if(data.type === 'active'){
+      if (data.type === 'active') {
         this.getActiveUsers();
       }
       // If Global Message
-      if(data.type === 'global'){
+      if (data.type === 'global') {
         this.messages.next(data);
       }
       // If Private Message
-      if(data.type === 'private'){
-        console.log("Message Received")
+      if (data.type === 'private') {
+        console.log('Message Received');
         this.privateMessages.next(data);
       }
-    }
+    };
 
     this.socket.onerror = (event: Event) => {
       console.error(event);
-    }
+    };
 
     this.socket.onclose = (event: CloseEvent) => {
       this.connection.next(false);
       console.log('WebSocket connection closed');
       this.changeOffline();
-    }
+    };
 
     return () => this.socket.close();
   }
 
   // Get Observables
-  getConnection(): Observable<boolean>{
+  getConnection(): Observable<boolean> {
     return this.connection.asObservable();
   }
 
@@ -88,76 +84,86 @@ export class WebsocketService {
   }
 
   // Active
-  sendActive(username: string){
+  sendActive(username: string) {
     this.changeActive();
-    if(this.socket && this.socket.readyState === WebSocket.OPEN){
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       let data = {
         type: 'active',
         username: username,
-        message: `${username} is now active.`
-      }
+        message: `${username} is now active.`,
+      };
       this.socket.send(JSON.stringify(data));
     }
 
-    if(this.socket && this.socket.readyState === WebSocket.OPEN){
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       let data = {
         type: 'register',
         username: username,
-        message: `${username}'s connection added.`
-      }
+        message: `${username}'s connection added.`,
+      };
       this.socket.send(JSON.stringify(data));
     }
   }
 
-  changeActive(){
+  changeActive() {
     let data = {
-      userid: this.userid
+      userid: this.userid,
     };
-    this.http.post(`${mainPort}/pdo/api/change_active`, data).subscribe(result => {
-      this.getActiveUsers();
-    });
+    this.http
+      .post(`${mainPort}/pdo/api/change_active`, data)
+      .subscribe((result) => {
+        this.getActiveUsers();
+      });
   }
 
-  changeOffline(){
+  changeOffline() {
     let data = {
-      userid: this.userid
+      userid: this.userid,
     };
-    this.http.post(`${mainPort}/pdo/api/change_offline`, data).subscribe(result => {
-      console.log('User status changed to offline');
-    });
+    this.http
+      .post(`${mainPort}/pdo/api/change_offline`, data)
+      .subscribe((result) => {
+        console.log('User status changed to offline');
+      });
   }
 
-  getActiveUsers(){
-    this.http.get<User[]>(`${mainPort}/pdo/api/get_active_users`).subscribe((result: User[]) => {
-      this.activeUsers.next(result); 
-    });
+  getActiveUsers() {
+    this.http
+      .get<User[]>(`${mainPort}/pdo/api/get_active_users`)
+      .subscribe((result: User[]) => {
+        this.activeUsers.next(result);
+      });
   }
 
   // Send Message
-  send(message: Message){
-    if(this.socket && this.socket.readyState === WebSocket.OPEN){
+  send(message: Message) {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       this.socket.send(JSON.stringify(message));
     }
   }
 
-  sendPrivate(chatterUsername: string, message: string){
-    if(this.socket && this.socket.readyState === WebSocket.OPEN){
+  sendPrivate(chatterUsername: string, message: string) {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
       let data = {
         type: 'private',
         username: this.username,
         chatterUsername: chatterUsername,
-        message: message
-      }
+        message: message,
+      };
       this.socket.send(JSON.stringify(data));
     }
   }
+  //Close Connection
+  closeConnection() {
+    this.socket.close();
+    this.changeOffline();
+  }
 
   // Close Connection if Tab Closes
-  private addCloseEventListener(){
+  addCloseEventListener() {
     window.addEventListener('beforeunload', () => {
-      if(this.socket && this.socket.readyState === WebSocket.OPEN){
-        this.changeOffline(); 
-        this.socket.close();
+      if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+        this.closeConnection();
       }
     });
   }

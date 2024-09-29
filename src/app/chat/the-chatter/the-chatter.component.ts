@@ -1,4 +1,11 @@
-import { Component, ElementRef, Input, input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Input,
+  input,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { UsersService } from '../../services/users/users.service';
 import { User } from '../../interfaces/user';
 import { NgClass, NgFor, NgIf } from '@angular/common';
@@ -14,9 +21,9 @@ import { AuthenticationService } from '../../services/authentication/authenticat
   standalone: true,
   imports: [NgFor, FormsModule, NgClass, NgIf],
   templateUrl: './the-chatter.component.html',
-  styleUrl: './the-chatter.component.css'
+  styleUrl: './the-chatter.component.css',
 })
-export class TheChatterComponent implements OnInit{
+export class TheChatterComponent implements OnInit {
   @ViewChild('messageList') private messageList!: ElementRef;
 
   // Variables
@@ -24,21 +31,23 @@ export class TheChatterComponent implements OnInit{
   username = localStorage.getItem('username');
   userid = localStorage.getItem('userid');
   active: User[] = [];
-  message: string = "";
+  message: string = '';
   messages: Message[] = [];
 
   constructor(
     private userService: UsersService,
     private messageService: MessageService,
-    private webSocketService: WebsocketService,
+    private webSocketService: WebsocketService
   ) {}
 
   ngOnInit(): void {
     this.getUsers();
-    this.messageService.retrieveChatterMessage().subscribe((result: Message[]) => {
-      this.messages.push(...result);
-      this.scrollToBottom();
-    });
+    this.messageService
+      .retrieveChatterMessage()
+      .subscribe((result: Message[]) => {
+        this.messages.push(...result);
+        this.scrollToBottom();
+      });
     //Get Active
     this.webSocketService.getActive().subscribe((activeUsers: User[]) => {
       this.active = activeUsers;
@@ -68,16 +77,18 @@ export class TheChatterComponent implements OnInit{
         let messageJSON = {
           type: 'global',
           username: this.username!,
-          message: this.message
+          message: this.message,
+          sender: null,
+          receiver: null,
         };
         this.webSocketService.send(messageJSON);
         this.messages.push(messageJSON);
         // Store Message
-        this.messageService.storeChatterMessage(2, this.username!, this.message).subscribe(result => {
-          
-        });
+        this.messageService
+          .storeChatterMessage(2, this.username!, this.message)
+          .subscribe((result) => {});
         // Clear Textbox
-        this.message = "";
+        this.message = '';
         this.scrollToBottom();
       }
     }
@@ -85,7 +96,9 @@ export class TheChatterComponent implements OnInit{
 
   private scrollToBottom(): void {
     try {
-      this.messageList.nativeElement.scrollTop = this.messageList.nativeElement.scrollHeight;0
+      this.messageList.nativeElement.scrollTop =
+        this.messageList.nativeElement.scrollHeight;
+      0;
     } catch (err) {
       console.error('Scroll to bottom error:', err);
     }

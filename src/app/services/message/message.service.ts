@@ -5,24 +5,21 @@ import { Observable } from 'rxjs';
 import { Message } from '../../interfaces/message';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MessageService {
+  constructor(private http: HttpClient) {}
 
-  constructor(
-    private http: HttpClient
-  ) {}
-
-  storeChatterMessage(userid:number, username:string, message:string){
+  storeChatterMessage(userid: number, username: string, message: string) {
     let data = {
       userid: userid,
       username: username,
-      message: message
-    }
+      message: message,
+    };
 
-    return this.http.post(`${mainPort}/pdo/api/store_chatter_message`, data)
+    return this.http.post(`${mainPort}/pdo/api/store_chatter_message`, data);
   }
-  retrieveChatterMessage(): Observable<Message[]>{
+  retrieveChatterMessage(): Observable<Message[]> {
     return this.http.get<Message[]>(`${mainPort}/pdo/api/get_chatter_message`);
   }
 }

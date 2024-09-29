@@ -15,25 +15,47 @@
           </div>
         </div>
       </div>
-      <div
-        class="message-bar"
-        *ngFor="let user of users"
-        (click)="navigatePrivateChat(user.userid, user.username)"
-      >
-        <div class="logo">
-          <i class="bx bxs-user-circle"></i>
-        </div>
-        <div class="user">
-          <div class="username">
-            <h3>{{ user.username }}</h3>
+      <div class="chat-radio-bar">
+        <input
+          class="radio_input"
+          type="radio"
+          value="recents"
+          name="chat"
+          id="recents"
+          [(ngModel)]="activeChatList"
+        />
+        <label class="radio_label" for="recents">Recents</label>
+        <input
+          class="radio_input"
+          type="radio"
+          value="all"
+          name="chat"
+          id="all"
+          [(ngModel)]="activeChatList"
+        />
+        <label class="radio_label" for="all">All Users</label>
+      </div>
+      <div class="message-group">
+        <div
+          class="message-bar"
+          *ngFor="let user of users"
+          (click)="navigatePrivateChat(user.userid, user.username)"
+        >
+          <div class="logo">
+            <i class="bx bxs-user-circle"></i>
           </div>
-          <div class="message">
-            <p>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime
-              earum labore minus tempora veritatis consectetur dolorem sunt, non
-              similique aliquam nulla a nesciunt aliquid iste inventore quis
-              sint quae facere.
-            </p>
+          <div class="user">
+            <div class="username">
+              <h3>{{ user.username }}</h3>
+            </div>
+            <div class="message">
+              <p>
+                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime
+                earum labore minus tempora veritatis consectetur dolorem sunt,
+                non similique aliquam nulla a nesciunt aliquid iste inventore
+                quis sint quae facere.
+              </p>
+            </div>
           </div>
         </div>
       </div>

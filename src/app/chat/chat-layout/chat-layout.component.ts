@@ -7,11 +7,12 @@ import { Message } from '../../interfaces/message';
 import { User } from '../../interfaces/user';
 import { NgFor, NgIf } from '@angular/common';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-chat-layout',
   standalone: true,
-  imports: [RouterModule, NgFor, NgIf],
+  imports: [RouterModule, NgFor, NgIf, FormsModule],
   templateUrl: './chat-layout.component.html',
   styleUrl: './chat-layout.component.css',
 })
@@ -19,14 +20,19 @@ export class ChatLayoutComponent {
   users: User[] = [];
   chatTitle = 'The Chatter';
   username = localStorage.getItem('username');
+  activeChatList = 'recents';
 
   constructor(
+    private websocket: WebsocketService,
     private authentication: AuthenticationService,
     private userService: UsersService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
+    this.websocket.connect();
+    this.websocket.getActiveUsers();
+    this.websocket.addCloseEventListener();
     this.getUsers();
   }
 
