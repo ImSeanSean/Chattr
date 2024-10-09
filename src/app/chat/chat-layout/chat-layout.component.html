@@ -1,9 +1,12 @@
 <div *ngIf="loaded">
   <div class="body">
-    <div class="sidebar">
+    <div class="sidebar" [ngClass]="{ hidden: isSidebarHidden }">
       <div class="title">
         <h1>Chattr</h1>
-        <img src="{{ mainport }}/assets/logoWhite.png" />
+        <img src="/assets/logoWhite.png" />
+        <h1 (click)="toggleSidebar()" class="toggle-button">
+          <i class="bx bx-list-ul"></i>
+        </h1>
       </div>
       <div class="recents">
         <div class="chatter-bar" (click)="navigateChatterChat()">
@@ -54,8 +57,20 @@
         </div>
       </div>
     </div>
+    <<<<<<< HEAD
     <div class="main">
       <router-outlet></router-outlet>
+      =======
+      <div class="profile-bar">
+        <div class="profile">
+          <i class="bx bxs-user-circle"></i>
+          <h3>{{ username }}</h3>
+        </div>
+        <div class="settings">
+          <i class="bx bx-log-out" (click)="logout()"></i>
+        </div>
+        >>>>>>> NoRecent
+      </div>
     </div>
   </div>
 </div>

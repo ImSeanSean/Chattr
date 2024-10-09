@@ -53,6 +53,40 @@
   border-radius: 100px;
   object-fit: cover;
 }
+.chat-title h2 i {
+  font-size: 35px;
+}
+
+.messages {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.message-list {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+  overflow-y: auto;
+}
+.message-list .incoming {
+  display: flex;
+  gap: 5px;
+  max-width: 60%;
+  color: var(--accent-300);
+}
+.message-list .incoming .user {
+  background-color: var(--primary-700);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px;
+  border-radius: 15px;
+}
+.message-list .incoming .icon i {
+  font-size: 50px;
+}
 .message-list .outgoing {
   align-self: flex-end;
   display: flex;
@@ -114,4 +148,26 @@
   width: 35px;
   border-radius: 100px;
   object-fit: cover;
+}
+@media (max-width: 768px) {
+  .body {
+    width: 100vw; /* Full width on mobile */
+    height: 88vh; /* Full height on mobile */
+  }
+
+  .message .chat-box textarea {
+    font-size: 22px;
+  }
+
+  .message-list {
+    width: 100vw;
+  }
+
+  .chat-box {
+    width: 100vw;
+  }
+
+  .active-users {
+    display: none;
+  }
 }

@@ -1,4 +1,7 @@
 <div class="chat-title">
+  <h2 (click)="toggleSidebar()" class="toggle-button">
+    <i class="bx bx-list-ul"></i>
+  </h2>
   <i class="bx bx-globe"></i>
   <h1>The Chatter</h1>
 </div>
@@ -21,6 +24,7 @@
             *ngIf="getUserProfile(message.username)"
             src="{{ getUserProfile(message.username) }}"
           />
+          <i class="bx bxs-user-circle"></i>
         </div>
         <div class="user">
           <h3>{{ message.username }}</h3>
