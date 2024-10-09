@@ -39,6 +39,12 @@
   overflow-x: hidden;
 }
 
+.chatter-bar i,
+.message-bar i {
+  margin-left: auto;
+  font-size: 13px;
+}
+
 .chatter-bar,
 .message-bar {
   cursor: pointer;

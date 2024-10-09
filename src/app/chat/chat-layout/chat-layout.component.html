@@ -17,6 +17,7 @@
             <h3>The Chatter</h3>
           </div>
         </div>
+        <i class="bx bxs-circle" *ngIf="chatterMessages == true"></i>
       </div>
       <div
         class="message-bar"
@@ -31,6 +32,10 @@
             <h3>{{ user.username }}</h3>
           </div>
         </div>
+        <i
+          class="bx bxs-circle"
+          *ngIf="privateUnreadCounts[user.username] > 0"
+        ></i>
       </div>
     </div>
     <div class="profile-bar">
