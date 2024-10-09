@@ -4,11 +4,12 @@
   width: 100vw;
   overflow: hidden;
 }
-/*Sidebar*/
+
 .sidebar {
   background-color: var(--primary-500);
   width: 23vw;
 }
+
 .title {
   display: flex;
   align-items: center;
@@ -18,13 +19,15 @@
   padding: 0px 10px;
   border-bottom: 4px solid var(--primary-400);
 }
+
 .title img {
   height: 55px;
 }
+
 .title h1 {
   font-size: 40px;
 }
-/*Recent Messages*/
+
 .recents {
   display: flex;
   flex-direction: column;
@@ -32,29 +35,17 @@
   width: 100%;
   height: 80vh;
   padding: 20px 10px;
-}
-.message-group {
-  height: 80%;
   overflow-y: auto;
   overflow-x: hidden;
 }
-.chatter-bar {
-  cursor: pointer;
-  align-items: center;
-  background-color: var(--primary-700);
-  border: solid 1.5px #63666a;
-  border-radius: 15px;
-  padding: 10px 15px;
-  display: flex;
-  gap: 5px;
-  color: var(--accent-300);
+
+.chatter-bar i,
+.message-bar i {
+  margin-left: auto;
+  font-size: 13px;
 }
-.chatter-bar .logo {
-  height: 100%;
-}
-.chatter-bar .logo i {
-  font-size: 45px;
-}
+
+.chatter-bar,
 .message-bar {
   cursor: pointer;
   align-items: center;
@@ -65,26 +56,33 @@
   display: flex;
   gap: 5px;
   color: var(--accent-300);
-  width: 100%;
 }
+
+.chatter-bar .logo,
 .message-bar .logo {
   height: 100%;
 }
+
+.chatter-bar .logo i,
 .message-bar .logo i {
   font-size: 45px;
 }
+
 .message-bar .user {
   width: 100%;
 }
+
 .message-bar .user .message {
   width: 80%;
 }
+
 .message-bar .message p {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 14px;
 }
+
 .profile-bar {
   border-top: 4px solid var(--accent-500);
   height: 8vh;
@@ -93,15 +91,18 @@
   font-size: 15px;
   color: var(--accent-300);
 }
+
 .profile-bar .profile {
   display: flex;
   align-items: center;
   padding: 0px 15px;
   gap: 8px;
 }
+
 .profile-bar .profile i {
   font-size: 30px;
 }
+
 .profile-bar .settings {
   display: flex;
   padding: 0px 15px;
@@ -109,47 +110,61 @@
   align-items: center;
   font-size: 27.5px;
 }
+
 .profile-bar .settings i {
   cursor: pointer;
 }
+
 .profile-bar .settings .settings-window {
   background-color: var(--primary-700);
   font-size: 16px;
   display: none;
 }
+
 .profile-bar .settings i:hover {
   display: block;
 }
-/*Chat*/
+
 .main {
   width: 77vw;
-}
-/*Chat Radio*/
-.chat-radio-bar {
-  display: inline-flex;
-  overflow: hidden;
-  border-radius: 15px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.25);
+  transition: width 0.3s ease;
 }
 
-.radio_input {
-  display: none;
-}
-
-.radio_label {
-  padding: 8px 14px;
-  font-size: 14px;
-  color: #ffff;
-  background-color: var(--primary-700);
+.toggle-button {
+  background: transparent;
+  border: none;
   cursor: pointer;
-  width: 50%;
-  transition: background 0.1s;
+  z-index: 1000;
+  margin-left: auto;
 }
 
-.radio_label:not(:last-of-type) {
-  border-right: 1px solid #63666a;
+@media (max-width: 768px) {
+  .sidebar {
+    width: 80vw;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 1000;
+    background-color: var(--primary-500);
+    transition: opacity 0.3s ease;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .sidebar.hidden {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  .main {
+    width: 100vw;
+    margin-left: 0;
+  }
 }
 
-.radio_input:checked + .radio_label {
-  background-color: var(--primary-400);
+@media (min-width: 769px) {
+  .toggle-button {
+    display: none;
+  }
 }

@@ -1,8 +1,11 @@
 <div class="body">
-  <div class="sidebar">
+  <div class="sidebar" [ngClass]="{ hidden: isSidebarHidden }">
     <div class="title">
       <h1>Chattr</h1>
       <img src="/assets/logoWhite.png" />
+      <h1 (click)="toggleSidebar()" class="toggle-button">
+        <i class="bx bx-list-ul"></i>
+      </h1>
     </div>
     <div class="recents">
       <div class="chatter-bar" (click)="navigateChatterChat()">
@@ -14,50 +17,25 @@
             <h3>The Chatter</h3>
           </div>
         </div>
+        <i class="bx bxs-circle" *ngIf="chatterMessages == true"></i>
       </div>
-      <div class="chat-radio-bar">
-        <input
-          class="radio_input"
-          type="radio"
-          value="recents"
-          name="chat"
-          id="recents"
-          [(ngModel)]="activeChatList"
-        />
-        <label class="radio_label" for="recents">Recents</label>
-        <input
-          class="radio_input"
-          type="radio"
-          value="all"
-          name="chat"
-          id="all"
-          [(ngModel)]="activeChatList"
-        />
-        <label class="radio_label" for="all">All Users</label>
-      </div>
-      <div class="message-group">
-        <div
-          class="message-bar"
-          *ngFor="let user of users"
-          (click)="navigatePrivateChat(user.userid, user.username)"
-        >
-          <div class="logo">
-            <i class="bx bxs-user-circle"></i>
-          </div>
-          <div class="user">
-            <div class="username">
-              <h3>{{ user.username }}</h3>
-            </div>
-            <div class="message">
-              <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit. Maxime
-                earum labore minus tempora veritatis consectetur dolorem sunt,
-                non similique aliquam nulla a nesciunt aliquid iste inventore
-                quis sint quae facere.
-              </p>
-            </div>
+      <div
+        class="message-bar"
+        *ngFor="let user of users"
+        (click)="navigatePrivateChat(user.userid, user.username)"
+      >
+        <div class="logo">
+          <i class="bx bxs-user-circle"></i>
+        </div>
+        <div class="user">
+          <div class="username">
+            <h3>{{ user.username }}</h3>
           </div>
         </div>
+        <i
+          class="bx bxs-circle"
+          *ngIf="privateUnreadCounts[user.username] > 0"
+        ></i>
       </div>
     </div>
     <div class="profile-bar">
@@ -67,11 +45,6 @@
       </div>
       <div class="settings">
         <i class="bx bx-log-out" (click)="logout()"></i>
-        <!-- <i class="bx bxs-cog"></i>
-        <div class="settings-window">
-          <label>Change Profile Image</label>
-          <label>Log-out</label>
-        </div> -->
       </div>
     </div>
   </div>

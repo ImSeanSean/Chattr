@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { Message } from '../../interfaces/message';
 import { MessageService } from '../../services/message/message.service';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
+import { SidebarService } from '../../services/sidebar/sidebar.service';
 
 @Component({
   selector: 'app-the-chatter',
@@ -37,8 +38,13 @@ export class TheChatterComponent implements OnInit {
   constructor(
     private userService: UsersService,
     private messageService: MessageService,
-    private webSocketService: WebsocketService
-  ) {}
+    private webSocketService: WebsocketService,
+    private sidebarService: SidebarService
+  ) {
+    this.sidebarService.isSidebarHidden$.subscribe((hidden) => {
+      this.isSidebarHidden = hidden;
+    });
+  }
 
   ngOnInit(): void {
     this.getUsers();
@@ -102,5 +108,16 @@ export class TheChatterComponent implements OnInit {
     } catch (err) {
       console.error('Scroll to bottom error:', err);
     }
+  }
+
+  isSidebarHidden: boolean = false;
+  toggleSidebar() {
+    this.sidebarService.toggleSideBar();
+  }
+
+  showActiveUsers: boolean = false;
+
+  toggleActiveUsers() {
+    this.showActiveUsers = !this.showActiveUsers;
   }
 }
