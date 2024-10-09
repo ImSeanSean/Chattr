@@ -17,6 +17,13 @@
   font-size: 60px;
 }
 
+.chat-title img {
+  height: 50px;
+  width: 50px;
+  border-radius: 100px;
+  object-fit: cover;
+}
+
 .messages {
   width: 100%;
   display: flex;
@@ -47,6 +54,13 @@
 }
 .message-list .incoming .icon i {
   font-size: 50px;
+}
+
+.message-list .incoming .icon img {
+  height: 50px;
+  width: 50px;
+  border-radius: 100px;
+  object-fit: cover;
 }
 .message-list .outgoing {
   align-self: flex-end;

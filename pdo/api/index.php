@@ -82,6 +82,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
             case 'change_offline':
                 echo json_encode($post->changeOffline($data));
                 break;
+            case 'upload_profile':
+                echo json_encode($post->profile($data));
+                break;
             default:
                 http_response_code(403);
                 break;

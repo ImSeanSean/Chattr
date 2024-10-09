@@ -20,7 +20,7 @@ export class WebsocketService {
   constructor(private http: HttpClient) {}
 
   connect() {
-    this.socket = new WebSocket('ws://localhost:8080');
+    this.socket = new WebSocket('ws://192.168.254.160:8080');
 
     let username = localStorage.getItem('username');
 

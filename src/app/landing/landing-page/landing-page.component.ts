@@ -12,6 +12,7 @@ import { LoginComponent } from '../../matdialogs/login/login.component';
 import { Router, RouterModule } from '@angular/router';
 import { RegisterComponent } from '../../matdialogs/register/register.component';
 import { WebsocketService } from '../../services/websocket/websocket.service';
+import { mainPort } from '../../app.component';
 
 @Component({
   selector: 'app-landing-page',
@@ -22,6 +23,7 @@ import { WebsocketService } from '../../services/websocket/websocket.service';
 })
 export class LandingPageComponent {
   readonly dialog = inject(MatDialog);
+  mainport = mainPort;
 
   openLogin() {
     this.dialog.open(LoginComponent, {

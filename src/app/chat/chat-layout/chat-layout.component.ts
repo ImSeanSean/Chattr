@@ -8,6 +8,8 @@ import { User } from '../../interfaces/user';
 import { NgFor, NgIf } from '@angular/common';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { FormsModule } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
+import { mainPort } from '../../app.component';
 
 @Component({
   selector: 'app-chat-layout',
@@ -17,16 +19,22 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './chat-layout.component.css',
 })
 export class ChatLayoutComponent {
+  user: User[] = [];
   users: User[] = [];
   chatTitle = 'The Chatter';
   username = localStorage.getItem('username');
+  userid = localStorage.getItem('userid');
   activeChatList = 'recents';
+  imageUrl = '';
+  loaded: Boolean = false;
+  mainport = mainPort;
 
   constructor(
     private websocket: WebsocketService,
     private authentication: AuthenticationService,
     private userService: UsersService,
-    private router: Router
+    private router: Router,
+    private http: HttpClient
   ) {}
 
   ngOnInit(): void {
@@ -34,6 +42,17 @@ export class ChatLayoutComponent {
     this.websocket.getActiveUsers();
     this.websocket.addCloseEventListener();
     this.getUsers();
+    this.getUser();
+  }
+
+  getUser() {
+    this.http
+      .get<User[]>(`${mainPort}/pdo/api/get_users/${this.userid}`)
+      .subscribe((user: User[]) => {
+        this.user = user;
+        this.imageUrl = user[0].profile;
+        this.loaded = true;
+      });
   }
 
   getUsers() {
@@ -55,5 +74,46 @@ export class ChatLayoutComponent {
 
   logout() {
     this.authentication.logout();
+  }
+
+  changeProfilePhoto(): void {
+    // Create a file input element
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+
+    // Trigger the file input dialog
+    fileInput.click();
+
+    // Add an event listener to handle the file selection
+    fileInput.addEventListener('change', (event: any) => {
+      const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+          // Update the imageUrl for immediate feedback
+          this.imageUrl = e.target.result;
+
+          // Prepare the image for upload
+          const profileImage = new FormData();
+          if (this.userid != null) {
+            profileImage.append('image', file);
+            profileImage.append('userid', this.userid);
+          }
+          // Upload the photo to the server
+          this.http
+            .post(`${mainPort}/pdo/api/upload_profile/`, profileImage)
+            .subscribe({
+              next: (response) => {},
+              error: (error) => {
+                console.error('Error uploading profile photo:', error);
+              },
+            });
+        };
+
+        // Read the image as a data URL for immediate display
+        reader.readAsDataURL(file);
+      }
+    });
   }
 }

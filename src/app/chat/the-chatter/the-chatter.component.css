@@ -1,105 +1,117 @@
-.body{
-    width: 77vw;
-    height: 88vh;
-    display: flex;
+.body {
+  width: 77vw;
+  height: 88vh;
+  display: flex;
 }
 
-.chat-title{
-    height: 12vh;
-    color: var(--accent-300);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    border-bottom: 4px solid var(--primary-700);
-    padding: 0px 10px;
+.chat-title {
+  height: 12vh;
+  color: var(--accent-300);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-bottom: 4px solid var(--primary-700);
+  padding: 0px 10px;
 }
-.chat-title i{
-    font-size: 60px;
+.chat-title i {
+  font-size: 60px;
 }
 
-.messages{
-    width: 80%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.messages {
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
-.message-list{
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    row-gap: 15px;
-    overflow-y: auto;
+.message-list {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 15px;
+  overflow-y: auto;
 }
-.message-list .incoming{
-    display: flex;
-    gap: 5px;
-    max-width: 60%;
-    color: var(--accent-300);
+.message-list .incoming {
+  display: flex;
+  gap: 5px;
+  max-width: 60%;
+  color: var(--accent-300);
 }
-.message-list .incoming .user{
-    background-color: var(--primary-700);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 15px;
-    border-radius: 15px;
+.message-list .incoming .user {
+  background-color: var(--primary-700);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px;
+  border-radius: 15px;
 }
-.message-list .incoming .icon i{
-    font-size: 50px
+.message-list .incoming .icon i {
+  font-size: 50px;
 }
-.message-list .outgoing{
-    align-self: flex-end;
-    display: flex;
-    gap: 5px;
-    max-width: 60%;
-    color: var(--accent-300);
+.message-list .incoming .icon img {
+  height: 50px;
+  width: 50px;
+  border-radius: 100px;
+  object-fit: cover;
 }
-.message-list .outgoing .user{
-    background-color: var(--primary-500);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 15px;
-    border-radius: 15px;
-    text-align: end;
+.message-list .outgoing {
+  align-self: flex-end;
+  display: flex;
+  gap: 5px;
+  max-width: 60%;
+  color: var(--accent-300);
 }
-.message-list .outgoing .icon i{
-    font-size: 50px
+.message-list .outgoing .user {
+  background-color: var(--primary-500);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px;
+  border-radius: 15px;
+  text-align: end;
 }
-.messages .chat-box{
-    padding: 0px 10px;
-    padding-bottom: 2vh;
-    height: 15%;
-    position: relative;
+.message-list .outgoing .icon i {
+  font-size: 50px;
 }
-.messages .chat-box textarea{
-    padding: 10px;
-    font-size: 16px;
-    color: var(--accent-300);
-    width: 100%;
-    resize: none;
-    height: 100%;
-    border: 2px solid var(--accent-500);
-    background-color: var(--primary-500);
+.messages .chat-box {
+  padding: 0px 10px;
+  padding-bottom: 2vh;
+  height: 15%;
+  position: relative;
 }
-.active-users{
-    width: 20%;
-    border-left: 2px solid var(--accent-500);
-    padding: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    color: var(--accent-300);
+.messages .chat-box textarea {
+  padding: 10px;
+  font-size: 16px;
+  color: var(--accent-300);
+  width: 100%;
+  resize: none;
+  height: 100%;
+  border: 2px solid var(--accent-500);
+  background-color: var(--primary-500);
 }
-.active-users h3{
-    padding: 10px 0px;
+.active-users {
+  width: 20%;
+  border-left: 2px solid var(--accent-500);
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  color: var(--accent-300);
 }
-.active-users .user{
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    color: var(--accent-300);
+.active-users h3 {
+  padding: 10px 0px;
 }
-.active-users .user i{
-    font-size: 35px
+.active-users .user {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--accent-300);
+}
+.active-users .user i {
+  font-size: 35px;
+}
+.active-users .user img {
+  height: 35px;
+  width: 35px;
+  border-radius: 100px;
+  object-fit: cover;
 }

@@ -163,4 +163,85 @@ class Post
             return $this->sendPayLoad(null, "Failed to change status", $e->getMessage(), 500);
         }
     }
+
+    public function profile($data)
+    {
+        $id = $_POST['userid'];
+
+        if (isset($_FILES['image']) && $_FILES['image']['error'] == 0) {
+            $filePath = $this->profilePhotoUpload($_FILES['image'], $id);
+        }
+
+        // If image was uploaded, update the post with the image path
+        if ($filePath) {
+            $updateQuery = "UPDATE users SET profile = :image WHERE userid = :userid";
+            $updateStmt = $this->pdo->prepare($updateQuery);
+            $updateStmt->execute([
+                ':image' => $filePath,
+                ':userid' => $id
+            ]);
+        }
+
+        return $id;
+    }
+
+    private function profilePhotoUpload($fileData, $userId)
+    {
+        if (!isset($fileData) || $fileData === null) {
+            return;
+        }
+
+        // EXTRACTING FILE INFORMATION FROM $FILEDATA
+        $fileName = $fileData['name'];
+        $fileSize = $fileData['size'];
+        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION)); // Use lowercase for consistency
+
+        // CHECK IF FILE IS AN IMAGE
+        $allowedExtensions = array(
+            'jpg',
+            'jpeg',
+            'png',
+            'gif',
+            'bmp',
+            'svg',
+            'webp',
+            'tiff',
+            'tif',
+            'ico',
+            'psd',
+            'raw',
+            'heic',
+            'heif',
+            'avif',
+            'jfif',
+            'pjpeg'
+        );
+
+        if (!in_array($fileExt, $allowedExtensions)) {
+            return;
+        }
+
+        // CHECK IF FILE IS A VALID IMAGE
+        $imageInfo = getimagesize($fileData['tmp_name']);
+        if (!$imageInfo) {
+            return;
+        }
+
+        // CREATE THE DIRECTORY THAT STORES FILES IF IT DOESN'T ALREADY EXIST
+        $dir = __DIR__ . '/../images/users';
+        if (!file_exists($dir)) {
+            mkdir($dir, 0777, true);
+        }
+
+        // Set the target file name to the user ID
+        $targetFile = $dir . '/' . $userId . '.' . $fileExt;
+
+        // If the file already exists, it will be replaced automatically
+        if (move_uploaded_file($fileData['tmp_name'], $targetFile)) {
+            // FILE PATH FOR DB
+            return $userId . '.' . $fileExt; // Return the path to be stored in the database
+        }
+
+        return null; // Return null if the upload failed
+    }
 }

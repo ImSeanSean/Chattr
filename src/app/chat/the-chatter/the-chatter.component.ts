@@ -15,6 +15,7 @@ import { FormsModule } from '@angular/forms';
 import { Message } from '../../interfaces/message';
 import { MessageService } from '../../services/message/message.service';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
+import { mainPort } from '../../app.component';
 
 @Component({
   selector: 'app-the-chatter',
@@ -33,6 +34,7 @@ export class TheChatterComponent implements OnInit {
   active: User[] = [];
   message: string = '';
   messages: Message[] = [];
+  mainPort = mainPort;
 
   constructor(
     private userService: UsersService,
@@ -102,5 +104,12 @@ export class TheChatterComponent implements OnInit {
     } catch (err) {
       console.error('Scroll to bottom error:', err);
     }
+  }
+
+  getUserProfile(username: string): string | null {
+    const user = this.users.find((user) => user.username === username);
+    return user && user.profile
+      ? `${mainPort}/pdo/images/users/${user.profile}`
+      : null;
   }
 }

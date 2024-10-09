@@ -1,32 +1,49 @@
 <div class="chat-title">
-    <i class='bx bx-globe'></i>
-    <h1>The Chatter</h1>
+  <i class="bx bx-globe"></i>
+  <h1>The Chatter</h1>
 </div>
 <div class="body">
-    <div class="messages">
-        <div class="message-list" #messageList>
-            <div [ngClass]="{
-                incoming: message.username !== username,
-                outgoing: message.username === username
-            }" *ngFor="let message of messages">
-                <div class="icon" *ngIf="message.username !== username">
-                    <i class='bx bxs-user-circle'></i>
-                </div>
-                <div class="user">
-                    <h3>{{message.username}}</h3>
-                    <p>{{message.message}}</p>
-                </div>  
-            </div>
+  <div class="messages">
+    <div class="message-list" #messageList>
+      <div
+        [ngClass]="{
+          incoming: message.username !== username,
+          outgoing: message.username === username
+        }"
+        *ngFor="let message of messages"
+      >
+        <div class="icon" *ngIf="message.username !== username">
+          <i
+            class="bx bxs-user-circle"
+            *ngIf="!getUserProfile(message.username)"
+          ></i>
+          <img
+            *ngIf="getUserProfile(message.username)"
+            src="{{ getUserProfile(message.username) }}"
+          />
         </div>
-        <div class="chat-box">
-            <textarea (keydown)="sendMessage($event)" [(ngModel)]="message"></textarea>
+        <div class="user">
+          <h3>{{ message.username }}</h3>
+          <p>{{ message.message }}</p>
         </div>
+      </div>
     </div>
-    <div class="active-users">
-        <h3>Active Users ({{active.length}})</h3>
-        <div class="user" *ngFor="let user of active">
-            <i class='bx bxs-user-circle'></i>
-            <p>{{user.username}}</p>
-        </div>
+    <div class="chat-box">
+      <textarea
+        (keydown)="sendMessage($event)"
+        [(ngModel)]="message"
+      ></textarea>
     </div>
+  </div>
+  <div class="active-users">
+    <h3>Active Users ({{ active.length }})</h3>
+    <div class="user" *ngFor="let user of active">
+      <i class="bx bxs-user-circle" *ngIf="!user.profile"></i>
+      <img
+        *ngIf="user.profile"
+        src="{{ mainPort }}/pdo/images/users/{{ user.profile }}"
+      />
+      <p>{{ user.username }}</p>
+    </div>
+  </div>
 </div>

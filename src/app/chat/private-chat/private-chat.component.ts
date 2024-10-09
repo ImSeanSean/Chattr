@@ -24,6 +24,7 @@ export class PrivateChatComponent implements OnInit {
   chatter: User[] = [];
   message = '';
   messages: Message[] = [];
+  mainport = mainPort;
 
   constructor(
     private activeRoute: ActivatedRoute,

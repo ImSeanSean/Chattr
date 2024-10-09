@@ -70,6 +70,15 @@
 .message-bar .logo i {
   font-size: 45px;
 }
+
+.message-bar .logo img {
+  height: 42.5px;
+  width: 42.5px;
+  border-radius: 100px;
+  object-fit: cover;
+  margin-right: 2.5px;
+}
+
 .message-bar .user {
   width: 100%;
 }
@@ -99,6 +108,14 @@
 .profile-bar .profile i {
   font-size: 30px;
 }
+
+.profile-bar .profile img {
+  height: 30px;
+  width: 30px;
+  border-radius: 100px;
+  object-fit: cover;
+}
+
 .profile-bar .settings {
   display: flex;
   padding: 0px 15px;
