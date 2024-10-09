@@ -18,6 +18,7 @@
               <h3>The Chatter</h3>
             </div>
           </div>
+          <i class="bx bxs-circle" *ngIf="chatterMessages == true"></i>
         </div>
         <div
           class="message-bar"
@@ -36,8 +37,11 @@
               <h3>{{ user.username }}</h3>
             </div>
           </div>
+          <i
+            class="bx bxs-circle"
+            *ngIf="privateUnreadCounts[user.username] > 0"
+          ></i>
         </div>
-        <i class="bx bxs-circle" *ngIf="chatterMessages == true"></i>
       </div>
       <div class="profile-bar" (click)="changeProfilePhoto()">
         <div class="profile">
@@ -60,19 +64,6 @@
     </div>
     <div class="main">
       <router-outlet></router-outlet>
-      <div class="profile-bar">
-        <div class="profile">
-          <i class="bx bxs-user-circle"></i>
-          <h3>{{ username }}</h3>
-        </div>
-        <div class="settings">
-          <i class="bx bx-log-out" (click)="logout()"></i>
-        </div>
-        <i
-          class="bx bxs-circle"
-          *ngIf="privateUnreadCounts[user.username] > 0"
-        ></i>
-      </div>
     </div>
   </div>
 </div>
