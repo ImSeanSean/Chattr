@@ -37,6 +37,7 @@
             </div>
           </div>
         </div>
+        <i class="bx bxs-circle" *ngIf="chatterMessages == true"></i>
       </div>
       <div class="profile-bar" (click)="changeProfilePhoto()">
         <div class="profile">
@@ -67,6 +68,10 @@
         <div class="settings">
           <i class="bx bx-log-out" (click)="logout()"></i>
         </div>
+        <i
+          class="bx bxs-circle"
+          *ngIf="privateUnreadCounts[user.username] > 0"
+        ></i>
       </div>
     </div>
   </div>

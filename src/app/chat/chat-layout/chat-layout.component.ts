@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { Subscription } from 'rxjs';
 import { UsersService } from '../../services/users/users.service';
 import { WebsocketService } from '../../services/websocket/websocket.service';
 import { Message } from '../../interfaces/message';
@@ -17,7 +16,7 @@ import { SidebarService } from '../../services/sidebar/sidebar.service';
   standalone: true,
   imports: [RouterModule, NgFor, NgIf, FormsModule, NgClass],
   templateUrl: './chat-layout.component.html',
-  styleUrl: './chat-layout.component.css',
+  styleUrls: ['./chat-layout.component.css'],
 })
 export class ChatLayoutComponent {
   user: User[] = [];
@@ -30,6 +29,8 @@ export class ChatLayoutComponent {
   loaded: Boolean = false;
   mainport = mainPort;
   isSidebarHidden: boolean = false;
+  chatterMessages = false;
+  privateUnreadCounts: { [key: string]: number } = {};
 
   constructor(
     private websocket: WebsocketService,
@@ -60,23 +61,46 @@ export class ChatLayoutComponent {
         this.imageUrl = user[0].profile;
         this.loaded = true;
       });
+
+    this.websocket.getPrivateMessages().subscribe((message: Message) => {
+      if (!this.router.url.includes('chats/p')) {
+        this.incrementUnreadCount(message.username);
+      }
+    });
+
+    this.websocket.getMessages().subscribe((message: Message) => {
+      if (message) {
+        if (!this.router.url.includes('the-chatter')) {
+          this.chatterMessages = true;
+        }
+      }
+    });
+  }
+
+  incrementUnreadCount(senderId: string) {
+    if (this.privateUnreadCounts[senderId]) {
+      this.privateUnreadCounts[senderId]++;
+    } else {
+      this.privateUnreadCounts[senderId] = 1;
+    }
   }
 
   getUsers() {
     this.userService.getUsers().subscribe((result: User[]) => {
-      this.users = result;
-      this.users = this.users.filter((user) => user.username !== this.username);
+      this.users = result.filter((user) => user.username !== this.username);
     });
   }
 
   navigateChatterChat() {
     this.router.navigate(['/chats/the-chatter']);
     this.chatTitle = 'The Chatter';
+    this.chatterMessages = false;
   }
 
   navigatePrivateChat(userid: any, username: string) {
     this.router.navigate(['/chats/p', userid]);
     this.chatTitle = username;
+    this.privateUnreadCounts[username] = 0;
   }
 
   logout() {
