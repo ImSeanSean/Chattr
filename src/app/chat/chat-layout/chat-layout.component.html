@@ -3,7 +3,7 @@
     <div class="sidebar" [ngClass]="{ hidden: isSidebarHidden }">
       <div class="title">
         <h1>Chattr</h1>
-        <img src="/assets/logoWhite.png" />
+        <img src="{{ mainport }}/assets/logoWhite.png" />
         <h1 (click)="toggleSidebar()" class="toggle-button">
           <i class="bx bx-list-ul"></i>
         </h1>
@@ -57,10 +57,8 @@
         </div>
       </div>
     </div>
-    <<<<<<< HEAD
     <div class="main">
       <router-outlet></router-outlet>
-      =======
       <div class="profile-bar">
         <div class="profile">
           <i class="bx bxs-user-circle"></i>
@@ -69,7 +67,6 @@
         <div class="settings">
           <i class="bx bx-log-out" (click)="logout()"></i>
         </div>
-        >>>>>>> NoRecent
       </div>
     </div>
   </div>

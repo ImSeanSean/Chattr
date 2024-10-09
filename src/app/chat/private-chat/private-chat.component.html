@@ -21,7 +21,6 @@
           *ngFor="let message of messages"
         >
           <div class="icon" *ngIf="message.username !== username">
-            <<<<<<< HEAD
             <i class="bx bxs-user-circle" *ngIf="!this.chatter[0].profile"></i>
             <img
               *ngIf="this.chatter[0].profile"
@@ -29,9 +28,6 @@
                 this.chatter[0].profile
               }}"
             />
-            =======
-            <i class="bx bxs-user-circle"></i>
-            >>>>>>> NoRecent
           </div>
           <div class="user">
             <h3>{{ message.username }}</h3>
