@@ -5,14 +5,15 @@ import { UsersService } from '../../services/users/users.service';
 import { WebsocketService } from '../../services/websocket/websocket.service';
 import { Message } from '../../interfaces/message';
 import { User } from '../../interfaces/user';
-import { NgFor, NgIf } from '@angular/common';
+import { NgClass, NgFor, NgIf } from '@angular/common';
 import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { FormsModule } from '@angular/forms';
+import { SidebarService } from '../../services/sidebar/sidebar.service';
 
 @Component({
   selector: 'app-chat-layout',
   standalone: true,
-  imports: [RouterModule, NgFor, NgIf, FormsModule],
+  imports: [RouterModule, NgFor, NgIf, FormsModule, NgClass],
   templateUrl: './chat-layout.component.html',
   styleUrl: './chat-layout.component.css',
 })
@@ -21,13 +22,19 @@ export class ChatLayoutComponent {
   chatTitle = 'The Chatter';
   username = localStorage.getItem('username');
   activeChatList = 'recents';
+  isSidebarHidden: boolean = false;
 
   constructor(
     private websocket: WebsocketService,
     private authentication: AuthenticationService,
     private userService: UsersService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private sidebarService: SidebarService
+  ) {
+    this.sidebarService.isSidebarHidden$.subscribe((hidden) => {
+      this.isSidebarHidden = hidden;
+    });
+  }
 
   ngOnInit(): void {
     this.websocket.connect();
@@ -55,5 +62,9 @@ export class ChatLayoutComponent {
 
   logout() {
     this.authentication.logout();
+  }
+
+  toggleSidebar() {
+    this.sidebarService.toggleSideBar();
   }
 }

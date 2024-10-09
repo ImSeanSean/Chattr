@@ -1,8 +1,11 @@
 <div class="body">
-  <div class="sidebar">
+  <div class="sidebar" [ngClass]="{ hidden: isSidebarHidden }">
     <div class="title">
       <h1>Chattr</h1>
       <img src="/assets/logoWhite.png" />
+      <h1 (click)="toggleSidebar()" class="toggle-button">
+        <i class="bx bx-list-ul"></i>
+      </h1>
     </div>
     <div class="recents">
       <div class="chatter-bar" (click)="navigateChatterChat()">
@@ -37,11 +40,6 @@
       </div>
       <div class="settings">
         <i class="bx bx-log-out" (click)="logout()"></i>
-        <!-- <i class="bx bxs-cog"></i>
-        <div class="settings-window">
-          <label>Change Profile Image</label>
-          <label>Log-out</label>
-        </div> -->
       </div>
     </div>
   </div>

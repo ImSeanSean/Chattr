@@ -7,6 +7,7 @@ import { WebsocketService } from '../../services/websocket/websocket.service';
 import { FormsModule, NgModel } from '@angular/forms';
 import { NgClass, NgFor, NgIf } from '@angular/common';
 import { Message } from '../../interfaces/message';
+import { SidebarService } from '../../services/sidebar/sidebar.service';
 
 @Component({
   selector: 'app-private-chat',
@@ -28,8 +29,13 @@ export class PrivateChatComponent implements OnInit {
   constructor(
     private activeRoute: ActivatedRoute,
     private http: HttpClient,
-    private webSocketService: WebsocketService
-  ) {}
+    private webSocketService: WebsocketService,
+    private sidebarService: SidebarService
+  ) {
+    this.sidebarService.isSidebarHidden$.subscribe((hidden) => {
+      this.isSidebarHidden = hidden;
+    });
+  }
 
   ngOnInit(): void {
     this.activeRoute.paramMap.subscribe((result) => {
@@ -129,5 +135,10 @@ export class PrivateChatComponent implements OnInit {
     } catch (err) {
       console.error('Scroll to bottom error:', err);
     }
+  }
+
+  isSidebarHidden: boolean = false;
+  toggleSidebar() {
+    this.sidebarService.toggleSideBar();
   }
 }
