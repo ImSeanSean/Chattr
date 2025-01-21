@@ -6,15 +6,11 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { UsersService } from '../../services/users/users.service';
 import { User } from '../../interfaces/user';
 import { NgClass, NgFor, NgIf } from '@angular/common';
-import { WebsocketService } from '../../services/websocket/websocket.service';
 import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { Message } from '../../interfaces/message';
-import { MessageService } from '../../services/message/message.service';
-import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { SidebarService } from '../../services/sidebar/sidebar.service';
 
 @Component({
@@ -24,7 +20,7 @@ import { SidebarService } from '../../services/sidebar/sidebar.service';
   templateUrl: './the-chatter.component.html',
   styleUrl: './the-chatter.component.css',
 })
-export class TheChatterComponent implements OnInit {
+export class TheChatterComponent {
   @ViewChild('messageList') private messageList!: ElementRef;
 
   // Variables
@@ -35,44 +31,14 @@ export class TheChatterComponent implements OnInit {
   message: string = '';
   messages: Message[] = [];
 
-  constructor(
-    private userService: UsersService,
-    private messageService: MessageService,
-    private webSocketService: WebsocketService,
-    private sidebarService: SidebarService
-  ) {
+  constructor(private sidebarService: SidebarService) {
     this.sidebarService.isSidebarHidden$.subscribe((hidden) => {
       this.isSidebarHidden = hidden;
     });
   }
 
-  ngOnInit(): void {
-    this.getUsers();
-    this.messageService
-      .retrieveChatterMessage()
-      .subscribe((result: Message[]) => {
-        this.messages.push(...result);
-        this.scrollToBottom();
-      });
-    //Get Active
-    this.webSocketService.getActive().subscribe((activeUsers: User[]) => {
-      this.active = activeUsers;
-    });
-    //Get Message
-    this.webSocketService.getMessages().subscribe((message: Message) => {
-      this.messages.push(message);
-      this.scrollToBottom();
-    });
-  }
-
   ngAfterViewChecked() {
     this.scrollToBottom();
-  }
-
-  getUsers() {
-    this.userService.getUsers().subscribe((result: User[]) => {
-      this.users = result;
-    });
   }
 
   sendMessage(event: KeyboardEvent) {
@@ -87,12 +53,7 @@ export class TheChatterComponent implements OnInit {
           sender: null,
           receiver: null,
         };
-        this.webSocketService.send(messageJSON);
         this.messages.push(messageJSON);
-        // Store Message
-        this.messageService
-          .storeChatterMessage(2, this.username!, this.message)
-          .subscribe((result) => {});
         // Clear Textbox
         this.message = '';
         this.scrollToBottom();

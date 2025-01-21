@@ -19,24 +19,6 @@
         </div>
         <i class="bx bxs-circle" *ngIf="chatterMessages == true"></i>
       </div>
-      <div
-        class="message-bar"
-        *ngFor="let user of users"
-        (click)="navigatePrivateChat(user.userid, user.username)"
-      >
-        <div class="logo">
-          <i class="bx bxs-user-circle"></i>
-        </div>
-        <div class="user">
-          <div class="username">
-            <h3>{{ user.username }}</h3>
-          </div>
-        </div>
-        <i
-          class="bx bxs-circle"
-          *ngIf="privateUnreadCounts[user.username] > 0"
-        ></i>
-      </div>
     </div>
     <div class="profile-bar">
       <div class="profile">

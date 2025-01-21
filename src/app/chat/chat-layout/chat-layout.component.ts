@@ -1,11 +1,8 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { UsersService } from '../../services/users/users.service';
-import { WebsocketService } from '../../services/websocket/websocket.service';
 import { Message } from '../../interfaces/message';
 import { User } from '../../interfaces/user';
 import { NgClass, NgFor, NgIf } from '@angular/common';
-import { AuthenticationService } from '../../services/authentication/authentication.service';
 import { FormsModule } from '@angular/forms';
 import { SidebarService } from '../../services/sidebar/sidebar.service';
 
@@ -25,36 +22,9 @@ export class ChatLayoutComponent {
   chatterMessages = false;
   privateUnreadCounts: { [key: string]: number } = {};
 
-  constructor(
-    private websocket: WebsocketService,
-    private authentication: AuthenticationService,
-    private userService: UsersService,
-    private router: Router,
-    private sidebarService: SidebarService
-  ) {
+  constructor(private router: Router, private sidebarService: SidebarService) {
     this.sidebarService.isSidebarHidden$.subscribe((hidden) => {
       this.isSidebarHidden = hidden;
-    });
-  }
-
-  ngOnInit(): void {
-    this.websocket.connect();
-    this.websocket.getActiveUsers();
-    this.websocket.addCloseEventListener();
-    this.getUsers();
-
-    this.websocket.getPrivateMessages().subscribe((message: Message) => {
-      if (!this.router.url.includes('chats/p')) {
-        this.incrementUnreadCount(message.username);
-      }
-    });
-
-    this.websocket.getMessages().subscribe((message: Message) => {
-      if (message) {
-        if (!this.router.url.includes('the-chatter')) {
-          this.chatterMessages = true;
-        }
-      }
     });
   }
 
@@ -64,12 +34,6 @@ export class ChatLayoutComponent {
     } else {
       this.privateUnreadCounts[senderId] = 1;
     }
-  }
-
-  getUsers() {
-    this.userService.getUsers().subscribe((result: User[]) => {
-      this.users = result.filter((user) => user.username !== this.username);
-    });
   }
 
   navigateChatterChat() {
@@ -85,7 +49,7 @@ export class ChatLayoutComponent {
   }
 
   logout() {
-    this.authentication.logout();
+    this.router.navigate(['']);
   }
 
   toggleSidebar() {

@@ -11,7 +11,6 @@ import {
 import { LoginComponent } from '../../matdialogs/login/login.component';
 import { Router, RouterModule } from '@angular/router';
 import { RegisterComponent } from '../../matdialogs/register/register.component';
-import { WebsocketService } from '../../services/websocket/websocket.service';
 
 @Component({
   selector: 'app-landing-page',
@@ -36,21 +35,8 @@ export class LandingPageComponent {
     });
   }
 
-  constructor(private router: Router, private websocket: WebsocketService) {}
+  constructor(private router: Router) {}
   navigate() {
     this.router.navigate(['my-logs']);
-  }
-
-  ngOnInit(): void {
-    const email = localStorage.getItem('email');
-    const username = localStorage.getItem('username');
-    const userid = localStorage.getItem('userid');
-
-    // If the user is already logged in, navigate to the-chatter route
-    if (email && username && userid) {
-      this.router.navigate(['/chats/the-chatter']);
-    } else {
-      this.websocket.closeConnection();
-    }
   }
 }
